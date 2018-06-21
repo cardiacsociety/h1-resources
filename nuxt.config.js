@@ -42,6 +42,12 @@ module.exports = {
   */
   modules: [],
 
+  env: {
+    ALGOLIA_APP_ID: process.env.ALGOLIA_APP_ID || "0FBIYLBL7K",
+    ALGOLIA_API_KEY: process.env.ALGOLIA_API_KEY || "9d82fbc57b4db88eaac5fefca5c307a8",
+    ALGOLIA_RESOURCES_INDEX: process.env.ALGOLIA_RESOURCES_INDEX || "RESOURCES",
+  },
+
   /*
   ** Build configuration
   // */

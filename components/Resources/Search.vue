@@ -3,9 +3,9 @@
         <h2 class="title is-2">Resource Search Demo</h2>
         <p class="subtitle is-5 has-text-grey">Index updated daily from Pubmed</p>
         <ais-index
-                :app-id="Config.ALGOLIA_APP_ID"
-                :api-key="Config.ALGOLIA_API_KEY"
-                :index-name="Config.ALGOLIA_RESOURCES_INDEX"
+                :app-id="algoliaAppId"
+                :api-key="algoliaApiKey"
+                :index-name="algoliaResourceIndex"
                 :query-parameters="{'page': page, 'snippetEllipsisText': '…'}"
         >
             <div class="field">
@@ -40,55 +40,56 @@
 </template>
 
 <script>
-    import Config from '~/config'
-    import ScrollMonitor from 'scrollmonitor'
+  import ScrollMonitor from 'scrollmonitor'
 
-    export default {
+  export default {
 
-        data() {
-            return {
-                Config,
-                page: 1,
-            }
-        },
+    data() {
+      return {
+        algoliaAppId: process.env.ALGOLIA_APP_ID,
+        algoliaApiKey: process.env.ALGOLIA_API_KEY,
+        algoliaResourceIndex: process.env.ALGOLIA_RESOURCES_INDEX,
+        page: 1,
+      }
+    },
 
 
-        methods: {
+    methods: {
 
-            // create link test for a search result
-            resourceLinkText(result) {
+      // create link test for a search result
+      resourceLinkText(result) {
 
-                let t = (result.sourceNameAbbrev ? result.sourceNameAbbrev : '') +
-                    (result.sourcePubDate ? result.sourcePubDate : '') +
-                    (result.sourceVolume ? '; ' + result.sourceVolume : '') +
-                    (result.sourceIssue ? '(' + result.sourceIssue + ')' : '') +
-                    (result.sourcePages ? ': ' + result.sourcePages : '')
+        let t = (result.sourceNameAbbrev ? result.sourceNameAbbrev : '') +
+          (result.sourcePubDate ? result.sourcePubDate : '') +
+          (result.sourceVolume ? '; ' + result.sourceVolume : '') +
+          (result.sourceIssue ? '(' + result.sourceIssue + ')' : '') +
+          (result.sourcePages ? ': ' + result.sourcePages : '')
 
-                if (t) {
-                    return t
-                }
-
-                // resort to the short link url
-                return result.shortUrl
-            },
-
-            openResource(url) {
-                window.open(url)
-            },
-
-            loadMore: function () {
-                this.page++;
-            },
-        },
-
-        mounted() {
-            let e = document.getElementById('loadmore')
-            let w = ScrollMonitor.create(e)
-            w.enterViewport(() => {
-                this.loadMore()
-            })
+        if (t) {
+          return t
         }
+
+        // resort to the short link url
+        return result.shortUrl
+      },
+
+      openResource(url) {
+        window.open(url)
+      },
+
+      loadMore: function () {
+        this.page++;
+      },
+    },
+
+    mounted() {
+      let e = document.getElementById('loadmore')
+      let w = ScrollMonitor.create(e)
+      w.enterViewport(() => {
+        this.loadMore()
+      })
     }
+  }
 </script>
 
 <style scoped>
